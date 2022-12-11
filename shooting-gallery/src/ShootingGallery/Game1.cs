@@ -9,6 +9,12 @@ namespace ShootingGallery
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        // Store assets in variables
+        Texture2D targetSprite;
+        Texture2D crosshairSprite;
+        Texture2D backgroundSprite;
+        SpriteFont gameFont;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -26,6 +32,10 @@ namespace ShootingGallery
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            targetSprite = Content.Load<Texture2D>("target");
+            crosshairSprite = Content.Load<Texture2D>("crosshair");
+            backgroundSprite = Content.Load<Texture2D>("sky");
+            gameFont = Content.Load<SpriteFont>("galleryFont");
 
             // TODO: use this.Content to load your game content here
         }
@@ -43,9 +53,9 @@ namespace ShootingGallery
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
-
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
