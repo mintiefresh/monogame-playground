@@ -83,9 +83,10 @@ namespace ShootingGallery
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
-            // display background and target
+            // display background
             _spriteBatch.Draw(backgroundSprite, new Vector2(0, 0), Color.White);
-            _spriteBatch.Draw(targetSprite, targetPosition, Color.White);
+            // display target
+            if (timer > 0) _spriteBatch.Draw(targetSprite, new Vector2(targetPosition.X - targetRadius, targetPosition.Y - targetRadius), Color.White);
                 
             // display score
             _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(3, 3), Color.White);
