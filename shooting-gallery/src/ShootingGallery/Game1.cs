@@ -15,6 +15,12 @@ namespace ShootingGallery
         Texture2D backgroundSprite;
         SpriteFont gameFont;
 
+        Vector2 targetPosition = new Vector2(300,300);
+
+        int score = 0;
+        double timer = 10;
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -24,8 +30,6 @@ namespace ShootingGallery
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -33,19 +37,15 @@ namespace ShootingGallery
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             targetSprite = Content.Load<Texture2D>("target");
-            crosshairSprite = Content.Load<Texture2D>("crosshair");
+            crosshairSprite = Content.Load<Texture2D>("crosshairs");
             backgroundSprite = Content.Load<Texture2D>("sky");
             gameFont = Content.Load<SpriteFont>("galleryFont");
-
-            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -54,6 +54,14 @@ namespace ShootingGallery
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
+            // display background and target
+            _spriteBatch.Draw(backgroundSprite, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(targetSprite, targetPosition, Color.White);
+                
+            // display score
+            _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(3, 3), Color.White);
+            // display timer
+            _spriteBatch.DrawString(gameFont, $"Time : {timer}", new Vector2(3, 40), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
