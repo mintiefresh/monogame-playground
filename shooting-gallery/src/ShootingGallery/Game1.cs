@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ShootingGallery
 {
@@ -16,9 +17,12 @@ namespace ShootingGallery
         SpriteFont gameFont;
 
         Vector2 targetPosition = new Vector2(300,300);
+        const int targetRadius = 45;
 
         int score = 0;
         double timer = 10;
+
+        MouseState mState;
 
 
         public Game1()
@@ -48,6 +52,11 @@ namespace ShootingGallery
                 Exit();
 
             base.Update(gameTime);
+
+            // Update timer
+            if (timer > 0) timer -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (timer < 0) timer = 0;
+
         }
 
         protected override void Draw(GameTime gameTime)
@@ -61,7 +70,7 @@ namespace ShootingGallery
             // display score
             _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(3, 3), Color.White);
             // display timer
-            _spriteBatch.DrawString(gameFont, $"Time : {timer}", new Vector2(3, 40), Color.White);
+            _spriteBatch.DrawString(gameFont, $"Time : {Math.Ceiling(timer)}", new Vector2(3, 40), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
