@@ -69,6 +69,11 @@ namespace ShootingGallery
                 if (mouseTargetDist < targetRadius && timer > 0)
                 {
                     score++;
+
+                    // Move target to random location
+                    Random r = new Random();
+                    targetPosition.X = r.Next(0, _graphics.PreferredBackBufferWidth);
+                    targetPosition.Y = r.Next(0, _graphics.PreferredBackBufferHeight);
                 }
                 mRelease = false;
             }
