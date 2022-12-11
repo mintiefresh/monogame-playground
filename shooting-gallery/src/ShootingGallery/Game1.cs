@@ -17,7 +17,7 @@ namespace ShootingGallery
         SpriteFont gameFont;
 
         // Target sprite information
-        Vector2 targetPosition = new Vector2(300,300);
+        Vector2 targetPosition = new Vector2(300, 300);
         const int targetRadius = 45;
 
         // Scoreboard
@@ -93,7 +93,7 @@ namespace ShootingGallery
 
             // display target
             if (timer > 0) _spriteBatch.Draw(targetSprite, new Vector2(targetPosition.X - targetRadius, targetPosition.Y - targetRadius), Color.White);
-                
+
             // display score
             _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(3, 3), Color.White);
 
