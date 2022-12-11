@@ -16,13 +16,17 @@ namespace ShootingGallery
         Texture2D backgroundSprite;
         SpriteFont gameFont;
 
+        // Target sprite information
         Vector2 targetPosition = new Vector2(300,300);
         const int targetRadius = 45;
 
+        // Scoreboard
         int score = 0;
         double timer = 10;
 
+        // Mouse
         MouseState mState;
+        bool mRelease = true;
 
 
         public Game1()
@@ -51,11 +55,27 @@ namespace ShootingGallery
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            base.Update(gameTime);
-
             // Update timer
             if (timer > 0) timer -= gameTime.ElapsedGameTime.TotalSeconds;
             if (timer < 0) timer = 0;
+
+            // Check on mouse state and test if user clicked && released left mouse button
+            mState = Mouse.GetState();
+            if (mState.LeftButton == ButtonState.Pressed && mRelease == true)
+            {
+                // Get distance betwen mouse and target
+                float mouseTargetDist = Vector2.Distance(targetPosition, mState.Position.ToVector2());
+                // User scores if clicked inside the target radius and timer is still going
+                if (mouseTargetDist < targetRadius && timer > 0)
+                {
+                    score++;
+                }
+                mRelease = false;
+            }
+
+            // set mRelease to true if the 'button state' is released
+            if (mState.LeftButton == ButtonState.Released) mRelease = true;
+            base.Update(gameTime);
 
         }
 
