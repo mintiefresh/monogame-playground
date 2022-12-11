@@ -33,7 +33,7 @@ namespace ShootingGallery
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -81,15 +81,16 @@ namespace ShootingGallery
             // set mRelease to true if the 'button state' is released
             if (mState.LeftButton == ButtonState.Released) mRelease = true;
             base.Update(gameTime);
-
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
+
             // display background
             _spriteBatch.Draw(backgroundSprite, new Vector2(0, 0), Color.White);
+
             // display target
             if (timer > 0) _spriteBatch.Draw(targetSprite, new Vector2(targetPosition.X - targetRadius, targetPosition.Y - targetRadius), Color.White);
                 
@@ -102,7 +103,8 @@ namespace ShootingGallery
             // display score at the end of the game
             if (timer == 0) _spriteBatch.DrawString(gameFont, $"Congrats! Your score is {score}!", new Vector2(200, 200), Color.White);
 
-
+            // display crosshair on mouse
+            _spriteBatch.Draw(crosshairSprite, new Vector2(mState.X - 25, mState.Y - 25), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
