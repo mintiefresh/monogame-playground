@@ -90,8 +90,14 @@ namespace ShootingGallery
                 
             // display score
             _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(3, 3), Color.White);
+
             // display timer
             _spriteBatch.DrawString(gameFont, $"Time : {Math.Ceiling(timer)}", new Vector2(3, 40), Color.White);
+
+            // display score at the end of the game
+            if (timer == 0) _spriteBatch.DrawString(gameFont, $"Congrats! Your score is {score}!", new Vector2(200, 200), Color.White);
+
+
 
             _spriteBatch.End();
             base.Draw(gameTime);
