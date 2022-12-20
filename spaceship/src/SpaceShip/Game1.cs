@@ -9,6 +9,13 @@ namespace SpaceShip
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        // Declare Variables
+        Texture2D shipSprite;
+        Texture2D asteroidSprite;
+        Texture2D spaceSprite;
+        SpriteFont gameFont;
+        SpriteFont timerFont;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -18,7 +25,10 @@ namespace SpaceShip
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Set game resolution to 1280 x 720
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -26,8 +36,14 @@ namespace SpaceShip
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Assign variables to the assets
+            shipSprite = Content.Load<Texture2D>("ship");
+            asteroidSprite = Content.Load<Texture2D>("asteroid");
+            spaceSprite = Content.Load<Texture2D>("space");
+            gameFont = Content.Load<SpriteFont>("spaceFont");
+            timerFont = Content.Load<SpriteFont>("timerFont");
 
-            // TODO: use this.Content to load your game content here
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -43,9 +59,17 @@ namespace SpaceShip
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            // Draw spacebackground
+            _spriteBatch.Draw(spaceSprite, new Vector2(0, 0), Color.White);
+            // Draw Spaceship
+            _spriteBatch.Draw(shipSprite, new Vector2(200, 200), Color.White);
+            // Draw Asteroid
+            _spriteBatch.Draw(asteroidSprite, new Vector2(500, 500), Color.White);
 
+
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
