@@ -23,6 +23,7 @@ namespace SpaceShip
             // Add movement for ship
             KeyboardState keyboardState = Keyboard.GetState();
             float dt = (float) gameTime.ElapsedGameTime.TotalSeconds;
+
             if ((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)) && position.X < 1280) 
                 position.X += speed * dt;
             if ((keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && position.X > 0) 
