@@ -16,6 +16,9 @@ namespace SpaceShip
         SpriteFont gameFont;
         SpriteFont timerFont;
 
+        // Ship Object
+        Ship playerShip = new Ship();
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,8 +54,7 @@ namespace SpaceShip
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
+            playerShip.shipUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -64,10 +66,9 @@ namespace SpaceShip
             // Draw spacebackground
             _spriteBatch.Draw(spaceSprite, new Vector2(0, 0), Color.White);
             // Draw Spaceship
-            _spriteBatch.Draw(shipSprite, new Vector2(200, 200), Color.White);
+            _spriteBatch.Draw(shipSprite, new Vector2(playerShip.position.X - 34,playerShip.position.Y - 50), Color.White);
             // Draw Asteroid
             _spriteBatch.Draw(asteroidSprite, new Vector2(500, 500), Color.White);
-
 
             _spriteBatch.End();
             base.Draw(gameTime);
