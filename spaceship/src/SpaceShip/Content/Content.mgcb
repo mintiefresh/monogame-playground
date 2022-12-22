@@ -37,6 +37,12 @@
 /processorParam:TextureFormat=Color
 /build:ship.png
 
+#begin Sounds/departure.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/departure.ogg
+
 #begin space.png
 /importer:TextureImporter
 /processor:TextureProcessor

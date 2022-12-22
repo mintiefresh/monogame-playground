@@ -2,9 +2,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace SpaceShip
 {
+    public static class MySounds
+    {
+        public static Song bgMusic;
+    }
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -20,6 +26,8 @@ namespace SpaceShip
         // Initialize objects
         Ship playerShip = new Ship();
         Controller gameController = new Controller();
+
+        bool musicPlaying = false;
 
         public Game1()
         {
@@ -47,6 +55,8 @@ namespace SpaceShip
             spaceSprite = Content.Load<Texture2D>("space");
             gameFont = Content.Load<SpriteFont>("spaceFont");
             timerFont = Content.Load<SpriteFont>("timerFont");
+            MySounds.bgMusic = Content.Load<Song>("Sounds/departure");
+            //MediaPlayer.Play(MySounds.bgMusic);
         }
 
         protected override void Update(GameTime gameTime)
@@ -54,8 +64,19 @@ namespace SpaceShip
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Play music for level only
+            if (gameController.inGame && !musicPlaying)
+            {
+                MediaPlayer.Play(MySounds.bgMusic);
+                musicPlaying = true;
+            }
+            if (!gameController.inGame && musicPlaying)
+            {
+                MediaPlayer.Stop();
+                musicPlaying = false;
+            }
             // Ship cannot move while in main menu
-            if (gameController.inGame) playerShip.shipUpdate(gameTime);
+            if (gameController.inGame)playerShip.shipUpdate(gameTime);
             gameController.controllerUpdate(gameTime);
 
             // Go through asteroid list and run asteroidUpdate.
@@ -103,9 +124,8 @@ namespace SpaceShip
 
                 // Draw the menu
                 _spriteBatch.DrawString(gameFont, menuMessage, new Vector2(halfWidth - sizeOfText.X / 2, halfHeight), Color.White);
-
-
             }
+
             // Draw timer scoreboard at top left of screen
             _spriteBatch.DrawString(timerFont, $"Time: {Math.Floor(gameController.totalTime).ToString()}", new Vector2(3, 3), Color.White);
 
