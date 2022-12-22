@@ -18,7 +18,8 @@ namespace SpaceShip
 
         // Initialize objects
         Ship playerShip = new Ship();
-        Asteroid newAsteroid = new Asteroid(150);
+        //Asteroid newAsteroid = new Asteroid(150);
+        Controller gameController = new Controller();
 
         public Game1()
         {
@@ -46,8 +47,6 @@ namespace SpaceShip
             spaceSprite = Content.Load<Texture2D>("space");
             gameFont = Content.Load<SpriteFont>("spaceFont");
             timerFont = Content.Load<SpriteFont>("timerFont");
-
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -56,7 +55,23 @@ namespace SpaceShip
                 Exit();
 
             playerShip.shipUpdate(gameTime);
-            newAsteroid.asteroidUpdate(gameTime);
+            gameController.controllerUpdate(gameTime);
+
+            // Go through asteroid list and run asteroidUpdate.
+            for (int i = 0; i < gameController.asteroids.Count; i++)
+            {
+                gameController.asteroids[i].asteroidUpdate(gameTime);
+
+                // Check for collision between playerShip and asteroid
+                int sum = gameController.asteroids[i].radius + playerShip.radius;
+                if (Vector2.Distance(gameController.asteroids[i].position, playerShip.position) < sum)
+                {
+                    gameController.inGame = false;
+                    playerShip.position = Ship.defaultPosition;
+                    gameController.asteroids.Clear();
+
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -68,9 +83,14 @@ namespace SpaceShip
             // Draw spacebackground
             _spriteBatch.Draw(spaceSprite, new Vector2(0, 0), Color.White);
             // Draw Spaceship
-            _spriteBatch.Draw(shipSprite, new Vector2(playerShip.position.X - 34,playerShip.position.Y - 50), Color.White);
-            // Draw Asteroid
-            _spriteBatch.Draw(asteroidSprite, new Vector2(newAsteroid.position.X, newAsteroid.position.Y), Color.White);
+            _spriteBatch.Draw(shipSprite, new Vector2(playerShip.position.X - 34, playerShip.position.Y - 50), Color.White);
+            // Draw every asteroid from its list.
+            for (int i = 0; i < gameController.asteroids.Count; i++)
+            {
+                _spriteBatch.Draw(asteroidSprite, new Vector2(gameController.asteroids[i].position.X - gameController.asteroids[i].radius,
+                    gameController.asteroids[i].position.Y - gameController.asteroids[i].radius),
+                    Color.White);
+            }
 
             _spriteBatch.End();
             base.Draw(gameTime);
