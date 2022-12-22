@@ -56,7 +56,6 @@ namespace SpaceShip
             gameFont = Content.Load<SpriteFont>("spaceFont");
             timerFont = Content.Load<SpriteFont>("timerFont");
             MySounds.bgMusic = Content.Load<Song>("Sounds/departure");
-            //MediaPlayer.Play(MySounds.bgMusic);
         }
 
         protected override void Update(GameTime gameTime)
