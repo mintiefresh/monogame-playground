@@ -16,8 +16,9 @@ namespace SpaceShip
         SpriteFont gameFont;
         SpriteFont timerFont;
 
-        // Ship Object
+        // Initialize objects
         Ship playerShip = new Ship();
+        Asteroid newAsteroid = new Asteroid(150);
 
         public Game1()
         {
@@ -55,6 +56,7 @@ namespace SpaceShip
                 Exit();
 
             playerShip.shipUpdate(gameTime);
+            newAsteroid.asteroidUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -68,7 +70,7 @@ namespace SpaceShip
             // Draw Spaceship
             _spriteBatch.Draw(shipSprite, new Vector2(playerShip.position.X - 34,playerShip.position.Y - 50), Color.White);
             // Draw Asteroid
-            _spriteBatch.Draw(asteroidSprite, new Vector2(500, 500), Color.White);
+            _spriteBatch.Draw(asteroidSprite, new Vector2(newAsteroid.position.X, newAsteroid.position.Y), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
