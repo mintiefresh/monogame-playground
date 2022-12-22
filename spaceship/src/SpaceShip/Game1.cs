@@ -19,7 +19,6 @@ namespace SpaceShip
 
         // Initialize objects
         Ship playerShip = new Ship();
-        //Asteroid newAsteroid = new Asteroid(150);
         Controller gameController = new Controller();
 
         public Game1()
@@ -107,11 +106,8 @@ namespace SpaceShip
 
 
             }
-
             // Draw timer scoreboard at top left of screen
             _spriteBatch.DrawString(timerFont, $"Time: {Math.Floor(gameController.totalTime).ToString()}", new Vector2(3, 3), Color.White);
-
-
 
             _spriteBatch.End();
             base.Draw(gameTime);
