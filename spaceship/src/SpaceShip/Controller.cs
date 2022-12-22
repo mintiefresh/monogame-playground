@@ -23,11 +23,27 @@ namespace SpaceShip
         /// <param name="gameTime"></param>
         public void controllerUpdate(GameTime gameTime)
         {
-            // Count the timer down to spawn asteroids
-            timer -= gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Keep track of time elapsed in game;
-            totalTime += gameTime.ElapsedGameTime.TotalSeconds;
+            if (inGame)
+            {
+                // Count the timer down to spawn asteroids
+                timer -= gameTime.ElapsedGameTime.TotalSeconds;
+                // Keep track of time elapsed in game;
+                totalTime += gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                // Only start game if user presses enter
+                KeyboardState keyboardState = Keyboard.GetState();
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                {
+                    inGame = true;
+                    // reset all timer/speeds
+                    totalTime = 0;
+                    timer = 2;
+                    maxTime = 2;
+                    nextSpeed = 240;
+                }
+            }
 
             // Create asteroids
             if (timer <= 0)

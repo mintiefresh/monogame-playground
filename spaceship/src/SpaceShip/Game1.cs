@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -54,7 +55,8 @@ namespace SpaceShip
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            playerShip.shipUpdate(gameTime);
+            // Ship cannot move while in main menu
+            if (gameController.inGame) playerShip.shipUpdate(gameTime);
             gameController.controllerUpdate(gameTime);
 
             // Go through asteroid list and run asteroidUpdate.
@@ -69,7 +71,6 @@ namespace SpaceShip
                     gameController.inGame = false;
                     playerShip.position = Ship.defaultPosition;
                     gameController.asteroids.Clear();
-
                 }
             }
             base.Update(gameTime);
@@ -91,6 +92,26 @@ namespace SpaceShip
                     gameController.asteroids[i].position.Y - gameController.asteroids[i].radius),
                     Color.White);
             }
+
+            // Main Menu
+            if (gameController.inGame == false)
+            {
+                string menuMessage = "Press <Enter> to begin!";
+                // Center the message
+                Vector2 sizeOfText = gameFont.MeasureString(menuMessage);
+                int halfWidth = _graphics.PreferredBackBufferWidth / 2;
+                int halfHeight = _graphics.PreferredBackBufferHeight / 3;
+
+                // Draw the menu
+                _spriteBatch.DrawString(gameFont, menuMessage, new Vector2(halfWidth - sizeOfText.X / 2, halfHeight), Color.White);
+
+
+            }
+
+            // Draw timer scoreboard at top left of screen
+            _spriteBatch.DrawString(timerFont, $"Time: {Math.Floor(gameController.totalTime).ToString()}", new Vector2(3, 3), Color.White);
+
+
 
             _spriteBatch.End();
             base.Draw(gameTime);
