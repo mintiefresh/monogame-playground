@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Comora; 
 
 namespace rpg
 {
@@ -40,6 +41,7 @@ namespace rpg
         *    OBJECTS    *
         *****************/
         Player player = new Player();
+        Camera camera; // from Comora package
 
         public Game1()
         {
@@ -54,6 +56,8 @@ namespace rpg
             _graphics.PreferredBackBufferWidth = RESOLUTION_WIDTH;
             _graphics.PreferredBackBufferHeight = RESOLUTION_HEIGHT;
             _graphics.ApplyChanges();
+
+            this.camera = new Camera(_graphics.GraphicsDevice);
 
             base.Initialize();
         }
@@ -80,13 +84,16 @@ namespace rpg
                 Exit();
 
             player.Update(gameTime);
+            // Set Camera to player
+            this.camera.Position = player.Position;
+            this.camera.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(this.camera); // Get camera updated onto player
             // Draw background in upper left
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
 
