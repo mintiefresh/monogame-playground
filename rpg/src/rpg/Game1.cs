@@ -4,6 +4,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace rpg
 {
+    enum Dir
+    {
+        Down,
+        Up,
+        Left,
+        Right
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -24,6 +31,9 @@ namespace rpg
         Texture2D ball;
         Texture2D skull;
 
+        // OBJECTS
+        Player player = new Player();
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,7 +43,7 @@ namespace rpg
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // Set resolution of game
             _graphics.PreferredBackBufferWidth = RESOLUTION_WIDTH;
             _graphics.PreferredBackBufferHeight = RESOLUTION_HEIGHT;
             _graphics.ApplyChanges();
@@ -45,7 +55,7 @@ namespace rpg
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // Load Content
             playerSprite = Content.Load<Texture2D>("Player/player");
             walkDown = Content.Load<Texture2D>("Player/walkDown");
             walkUp = Content.Load<Texture2D>("Player/walkUp");
@@ -62,8 +72,7 @@ namespace rpg
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
+            player.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -73,6 +82,9 @@ namespace rpg
             _spriteBatch.Begin();
             // Draw background in upper left
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
+
+            // Draw player
+            _spriteBatch.Draw(playerSprite , new Vector2(player.Position.X - 48, player.Position.Y - 48), Color.White);
 
 
             _spriteBatch.End();
