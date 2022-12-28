@@ -8,13 +8,17 @@ namespace rpg
 {
     internal class Player
     {
+        /****************
+        *   VARIABLES   *
+        *****************/
         private Vector2 position = new Vector2(500, 300);
         private int speed = 300;
         private Dir direction = Dir.Down;
         private bool isMoving = false;
 
-
-        // Getter/Setter properties
+        /******************
+        *  GETTER/SETTER  *
+        *******************/
         public Vector2 Position
         {
             get { return position; }
@@ -22,8 +26,9 @@ namespace rpg
         public void setX(float newX) { position.X = newX; }
         public void setY(float newY) { position.Y = newY; }
 
-
-        // Methods
+        /****************
+        *    METHODS    *
+        *****************/
         public void Update(GameTime gameTime)
         {
             KeyboardState keyboardState = Keyboard.GetState();
@@ -32,7 +37,7 @@ namespace rpg
             // Player will only move isn't moving.
             isMoving = false;
 
-            /** Detect which direction player is moving **/
+            // Detect which direction player is moving
             // Player moves Right
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
@@ -57,8 +62,8 @@ namespace rpg
                 direction = Dir.Up;
                 isMoving = true;
             }
-
-            /** Move Player **/
+             
+            // Move player in direction detected above
             if (isMoving)
             {
                 switch (direction)

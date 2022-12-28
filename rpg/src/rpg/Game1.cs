@@ -16,11 +16,16 @@ namespace rpg
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        // CONSTANTS
+        /****************
+        *   CONSTANTS   *
+        *****************/
         const int RESOLUTION_WIDTH = 1280;
         const int RESOLUTION_HEIGHT = 720;
+        const int PLAYERPSRITERADIUS = 48;
 
-        // VARIABLES
+        /****************
+        *   VARIABLES   *
+        *****************/
         Texture2D playerSprite;
         Texture2D walkDown;
         Texture2D walkUp;
@@ -31,7 +36,9 @@ namespace rpg
         Texture2D ball;
         Texture2D skull;
 
-        // OBJECTS
+        /****************
+        *    OBJECTS    *
+        *****************/
         Player player = new Player();
 
         public Game1()
@@ -84,7 +91,7 @@ namespace rpg
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
 
             // Draw player
-            _spriteBatch.Draw(playerSprite , new Vector2(player.Position.X - 48, player.Position.Y - 48), Color.White);
+            _spriteBatch.Draw(playerSprite , new Vector2(player.Position.X - PLAYERPSRITERADIUS, player.Position.Y - PLAYERPSRITERADIUS), Color.White);
 
 
             _spriteBatch.End();
