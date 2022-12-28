@@ -38,7 +38,6 @@ namespace rpg
             _graphics.PreferredBackBufferHeight = RESOLUTION_HEIGHT;
             _graphics.ApplyChanges();
 
-
             base.Initialize();
         }
 
@@ -47,6 +46,15 @@ namespace rpg
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            playerSprite = Content.Load<Texture2D>("Player/player");
+            walkDown = Content.Load<Texture2D>("Player/walkDown");
+            walkUp = Content.Load<Texture2D>("Player/walkUp");
+            walkRight = Content.Load<Texture2D>("Player/walkRight");
+            walkLeft = Content.Load<Texture2D>("Player/walkLeft");
+
+            background = Content.Load<Texture2D>("background");
+            ball = Content.Load<Texture2D>("ball");
+            skull = Content.Load<Texture2D>("skull");
         }
 
         protected override void Update(GameTime gameTime)
@@ -63,8 +71,8 @@ namespace rpg
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
-
-            // TODO: Add your drawing code here
+            // Draw background in upper left
+            _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
 
 
             _spriteBatch.End();
