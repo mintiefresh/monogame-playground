@@ -28,10 +28,18 @@ namespace rpg
             get { return position; }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Vector2 playerPos)
         {
             anim.Position = new Vector2(position.X - Game1.ENEMY_SPRITE_WIDTH, position.Y - Game1.ENEMY_SPRITE_HEIGHT);
             anim.Update(gameTime);
+
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Create a vector that points from enemy to player
+            Vector2 moveDir = playerPos - position;
+            moveDir.Normalize();        // Normalizing keeps vector length to be 1
+            // Update enemy position with new vector
+            position += moveDir * speed * dt;
         }
     }
 }

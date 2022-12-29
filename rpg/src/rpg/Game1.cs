@@ -110,7 +110,7 @@ namespace rpg
             // Enemies
             foreach (Enemy enemy in Enemy.enemies)
             {
-                enemy.Update(gameTime);
+                enemy.Update(gameTime, player.Position);
             }
 
             base.Update(gameTime);
