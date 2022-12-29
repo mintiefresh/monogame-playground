@@ -14,7 +14,7 @@ namespace rpg
 
         // Enemy properties
         private Vector2 position = new Vector2(0, 0);
-        private int speed = 150;
+        private int speed = 200;
         public SpriteAnimation anim;
         private int radius = 30;
         private bool dead = false;

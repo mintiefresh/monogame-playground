@@ -140,10 +140,10 @@ namespace rpg
             }
 
             // Shoot projectile if user presses space
-            if (keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
+            if (keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space) && !dead)
             {
                 Projectile.projectiles.Add(new Projectile(position, direction));
-                MySounds.projectileSound.Play();
+                MySounds.projectileSound.Play(0.5f, 0f, 0f);
             }
             prevKeyboardState = keyboardState;
         } // end of Update()

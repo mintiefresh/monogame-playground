@@ -122,6 +122,12 @@
 /processorParam:Quality=Best
 /build:Sounds/death.wav
 
+#begin Sounds/enemy_hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/enemy_hit.wav
+
 #begin Sounds/handcannon.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

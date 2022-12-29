@@ -19,6 +19,7 @@ namespace rpg
     {
         public static SoundEffect projectileSound;
         public static SoundEffect playerDeath;
+        public static SoundEffect enemyHit;
         public static Song bgMusic;
     }
     public class Game1 : Game
@@ -107,6 +108,7 @@ namespace rpg
             // Load sounds
             MySounds.projectileSound = Content.Load<SoundEffect>("Sounds/handcannon");
             MySounds.playerDeath = Content.Load<SoundEffect>("Sounds/death");
+            MySounds.enemyHit = Content.Load<SoundEffect>("Sounds/enemy_hit");
             MySounds.bgMusic = Content.Load<Song>("Sounds/megaman");
             MediaPlayer.Play(MySounds.bgMusic);
         }
@@ -163,8 +165,8 @@ namespace rpg
                         // Set 'collided/dead' flags to true
                         proj.Collided = true;
                         enemy.Dead = true;
+                        MySounds.enemyHit.Play();
                     }
-                    
                 }
             }
             // Remove every projectile/enemy whose collided/dead flag is true.

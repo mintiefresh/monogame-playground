@@ -36,10 +36,11 @@ namespace rpg
                         Enemy.enemies.Add(new Enemy(new Vector2(rand.Next(-500, 2000), 2000), spriteSheet));
                         break;
                 }
+
                 timer = maxTime;
-                if (maxTime > 0.5)
+                if (maxTime > 0.2)
                 {
-                    maxTime -= 0.05;
+                    maxTime -= 0.1;
                 }
             }
         }
