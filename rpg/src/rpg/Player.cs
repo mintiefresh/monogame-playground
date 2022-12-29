@@ -15,6 +15,7 @@ namespace rpg
         private int speed = 300;
         private Dir direction = Dir.Down;
         private bool isMoving = false;
+        private KeyboardState prevKeyboardState = Keyboard.GetState();
 
         // Animated movement
         public SpriteAnimation anim;
@@ -67,7 +68,7 @@ namespace rpg
                 direction = Dir.Up;
                 isMoving = true;
             }
-             
+
             // Move player in direction detected above
             if (isMoving)
             {
@@ -115,6 +116,13 @@ namespace rpg
             {
                 anim.setFrame(1);
             }
+
+            // Shoot projectile if user presses space
+            if (keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
+            {
+                Projectile.projectiles.Add(new Projectile(position, direction));
+            }
+            prevKeyboardState = keyboardState;
         } // end of Update()
     } // end of Player Class
 }

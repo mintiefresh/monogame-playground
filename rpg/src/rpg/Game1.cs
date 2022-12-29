@@ -96,6 +96,12 @@ namespace rpg
             this.camera.Position = player.Position;
             this.camera.Update(gameTime);
 
+            // Projectiles
+            foreach (Projectile proj in Projectile.projectiles)
+            {
+                proj.Update(gameTime);
+            }
+
             base.Update(gameTime);
         }
 
@@ -105,6 +111,12 @@ namespace rpg
             _spriteBatch.Begin(this.camera); // Get camera updated onto player
             // Draw background in upper left
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
+
+            // Draw projectile
+            foreach (Projectile proj in Projectile.projectiles)
+            {
+                _spriteBatch.Draw(ball, new Vector2(proj.Position.X - PLAYER_SPRITE_RADIUS, proj.Position.Y - PLAYER_SPRITE_RADIUS), Color.White);
+            }
 
             // Draw player and player animation
             player.anim.Draw(_spriteBatch);

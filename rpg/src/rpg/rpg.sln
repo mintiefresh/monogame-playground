@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rpg", "rpg.csproj", "{3CEF2C27-78DC-4C49-9835-508723AB9464}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rpg", "rpg.csproj", "{3CEF2C27-78DC-4C49-9835-508723AB9464}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4130BE93-107E-48E1-9EF9-9600FA6B92ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
