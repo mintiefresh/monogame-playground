@@ -140,3 +140,15 @@
 /processorParam:Quality=Best
 /build:Sounds/megaman.ogg
 
+#begin Sounds/teleport.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/teleport.wav
+
+#begin Sounds/title.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/title.ogg
+

@@ -13,7 +13,7 @@ namespace rpg
         public static double timer = 2;
         public static double maxTime = 2;  // will get shorter each time
         public static Random rand = new Random();
-
+        public static bool inGame = false;
         public static void Update(GameTime gameTime, Texture2D spriteSheet)
         {
             timer -= gameTime.ElapsedGameTime.TotalSeconds;

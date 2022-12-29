@@ -21,7 +21,9 @@ namespace rpg
         public static SoundEffect projectileSound;
         public static SoundEffect playerDeath;
         public static SoundEffect enemyHit;
+        public static SoundEffect gameStart;
         public static Song bgMusic;
+        public static Song titleMusic;
     }
     public class Game1 : Game
     {
@@ -57,6 +59,7 @@ namespace rpg
 
         bool deathSound = false;
         SpriteFont gameFont;
+        bool mainMenu = true;
 
         double timer = 0;
         int score = 0;
@@ -113,8 +116,10 @@ namespace rpg
             MySounds.projectileSound = Content.Load<SoundEffect>("Sounds/handcannon");
             MySounds.playerDeath = Content.Load<SoundEffect>("Sounds/death");
             MySounds.enemyHit = Content.Load<SoundEffect>("Sounds/enemy_hit");
+            MySounds.gameStart = Content.Load<SoundEffect>("Sounds/teleport");
             MySounds.bgMusic = Content.Load<Song>("Sounds/megaman");
-            MediaPlayer.Play(MySounds.bgMusic);
+            MySounds.titleMusic = Content.Load<Song>("Sounds/title");
+            MediaPlayer.Play(MySounds.titleMusic);
         }
 
         protected override void Update(GameTime gameTime)
@@ -122,63 +127,80 @@ namespace rpg
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // Sounds for dead only
-            if (player.Dead && !deathSound)
+            if (Controller.inGame)
             {
-                deathSound = true;
-                MediaPlayer.Stop();
-                MySounds.playerDeath.Play();
-            }
-
-            // Player
-            player.Update(gameTime);
-            this.camera.Position = player.Position;
-            this.camera.Update(gameTime);
-
-            // Controller to spawn enemies on a timer
-            if (!player.Dead) Controller.Update(gameTime, skull);
-
-            // Projectiles
-            foreach (Projectile proj in Projectile.projectiles)
-            {
-                proj.Update(gameTime);
-            }
-
-            // Enemies
-            foreach (Enemy enemy in Enemy.enemies)
-            {
-                enemy.Update(gameTime, player.Position, player.Dead);
-                // Check for enemy/player collision
-                int sum = enemy.Radius + player.Radius;
-                if (Vector2.Distance(player.Position, enemy.Position) < sum)
+                if (mainMenu)
                 {
-                    player.Dead = true;
+                    MediaPlayer.Play(MySounds.bgMusic);
+                    mainMenu = false;
                 }
-            }
+                // Sounds for dead only
+                if (player.Dead && !deathSound)
+                {
+                    deathSound = true;
+                    MediaPlayer.Stop();
+                    MySounds.playerDeath.Play();
+                }
 
-            // Check for collisions between projectiles and enemies
-            foreach (Projectile proj in Projectile.projectiles)
-            {
+                // Player
+                player.Update(gameTime);
+                this.camera.Position = player.Position;
+                this.camera.Update(gameTime);
+
+                // Controller to spawn enemies on a timer
+                if (!player.Dead) Controller.Update(gameTime, skull);
+
+                // Projectiles
+                foreach (Projectile proj in Projectile.projectiles)
+                {
+                    proj.Update(gameTime);
+                }
+
+                // Enemies
                 foreach (Enemy enemy in Enemy.enemies)
                 {
-                    // Distance between radii of enemy and projectile
-                    int sum = proj.radius + enemy.Radius;
-                    // If distance between projectile and radius is less than sum, there was collision
-                    if (Vector2.Distance(proj.Position, enemy.Position) < sum)
+                    enemy.Update(gameTime, player.Position, player.Dead);
+                    // Check for enemy/player collision
+                    int sum = enemy.Radius + player.Radius;
+                    if (Vector2.Distance(player.Position, enemy.Position) < sum)
                     {
-                        // Set 'collided/dead' flags to true
-                        proj.Collided = true;
-                        enemy.Dead = true;
-                        MySounds.enemyHit.Play();
-                        score++;
+                        player.Dead = true;
                     }
                 }
-            }
-            // Remove every projectile/enemy whose collided/dead flag is true.
-            Projectile.projectiles.RemoveAll(p => p.Collided);
-            Enemy.enemies.RemoveAll(e => e.Dead);
 
-            timer += gameTime.ElapsedGameTime.TotalSeconds;
+                // Check for collisions between projectiles and enemies
+                foreach (Projectile proj in Projectile.projectiles)
+                {
+                    foreach (Enemy enemy in Enemy.enemies)
+                    {
+                        // Distance between radii of enemy and projectile
+                        int sum = proj.radius + enemy.Radius;
+                        // If distance between projectile and radius is less than sum, there was collision
+                        if (Vector2.Distance(proj.Position, enemy.Position) < sum)
+                        {
+                            // Set 'collided/dead' flags to true
+                            proj.Collided = true;
+                            enemy.Dead = true;
+                            MySounds.enemyHit.Play();
+                            score++;
+                        }
+                    }
+                }
+                // Remove every projectile/enemy whose collided/dead flag is true.
+                Projectile.projectiles.RemoveAll(p => p.Collided);
+                Enemy.enemies.RemoveAll(e => e.Dead);
+
+                timer += gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                KeyboardState keyboardState = Keyboard.GetState();
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                {
+                    Controller.inGame = true;
+                    MySounds.gameStart.Play();
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -188,34 +210,40 @@ namespace rpg
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(this.camera); // Get camera updated onto player
             // Draw background in upper left
-            _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
-
-            // Draw Enemies
-            foreach (Enemy enemy in Enemy.enemies)
+            if (mainMenu)
             {
-                enemy.anim.Draw(_spriteBatch);
+                _spriteBatch.DrawString(gameFont, "Press <Enter> to begin!", new Vector2(-220, 0), Color.White);
+                _spriteBatch.Draw(playerSprite, new Vector2(-60, -150), Color.White);
             }
-
-            // Draw projectile
-            foreach (Projectile proj in Projectile.projectiles)
+            else
             {
-                _spriteBatch.Draw(ball, new Vector2(proj.Position.X - PLAYER_SPRITE_RADIUS, proj.Position.Y - PLAYER_SPRITE_RADIUS), Color.White);
+                _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
+                // Draw Enemies
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    enemy.anim.Draw(_spriteBatch);
+                }
+
+                // Draw projectile
+                foreach (Projectile proj in Projectile.projectiles)
+                {
+                    _spriteBatch.Draw(ball, new Vector2(proj.Position.X - PLAYER_SPRITE_RADIUS, proj.Position.Y - PLAYER_SPRITE_RADIUS), Color.White);
+                }
+
+                // Draw player and player animation
+                if (!player.Dead) player.anim.Draw(_spriteBatch);
+
+                if (player.Dead)
+                {
+                    _spriteBatch.DrawString(gameFont, "GAME OVER", new Vector2(player.Position.X - PLAYER_SPRITE_RADIUS, player.Position.Y - PLAYER_SPRITE_RADIUS), Color.White);
+                }
+
+                // Draw score
+                _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(player.Position.X - 550, player.Position.Y - 350), Color.White);
+
+                // Draw timer
+                _spriteBatch.DrawString(gameFont, $"Time : {Math.Ceiling(timer)}", new Vector2(player.Position.X - 550, player.Position.Y - 300), Color.White);
             }
-
-            // Draw player and player animation
-            if (!player.Dead) player.anim.Draw(_spriteBatch);
-
-            if (player.Dead)
-            {
-                _spriteBatch.DrawString(gameFont, "GAME OVER", new Vector2(player.Position.X - PLAYER_SPRITE_RADIUS, player.Position.Y-PLAYER_SPRITE_RADIUS), Color.White);
-            }
-
-            // Draw score
-            _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(player.Position.X - 550, player.Position.Y - 350), Color.White);
-
-            // Draw timer
-            _spriteBatch.DrawString(gameFont, $"Time : {Math.Ceiling(timer)}", new Vector2(player.Position.X - 550, player.Position.Y - 300), Color.White);
-
             _spriteBatch.End();
             base.Draw(gameTime);
         }
