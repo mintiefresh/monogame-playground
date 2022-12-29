@@ -13,8 +13,10 @@ namespace rpg
         *****************/
         private Vector2 position = new Vector2(500, 300);
         private int speed = 300;
+        private int radius = 32;
         private Dir direction = Dir.Down;
         private bool isMoving = false;
+        public bool dead = false;
         private KeyboardState prevKeyboardState = Keyboard.GetState();
 
         // Animated movement
@@ -31,6 +33,16 @@ namespace rpg
         }
         public void setX(float newX) { position.X = newX; }
         public void setY(float newY) { position.Y = newY; }
+        
+        public int Radius
+        {
+            get { return radius; }
+        }
+        public bool Dead
+        {
+            get { return dead; }
+            set { dead = value; }
+        }
 
         /****************
         *    METHODS    *
@@ -69,7 +81,8 @@ namespace rpg
                 isMoving = true;
             }
 
-            // Move player in direction detected above
+            // Move player in direction detected above IF player is alive
+            if (dead) isMoving = false;
             if (isMoving)
             {
                 switch (direction)
@@ -112,7 +125,12 @@ namespace rpg
 
             anim.Position = new Vector2(position.X - Game1.PLAYER_SPRITE_RADIUS, position.Y - Game1.PLAYER_SPRITE_RADIUS);
 
-            if (isMoving) // Walking animation when player moves
+            // shoot animation when space is pressed
+            if (keyboardState.IsKeyDown(Keys.Space))
+            {
+                anim.setFrame(0);
+            }
+            else if (isMoving) // Walking animation when player moves
             {
                 anim.Update(gameTime);
             }
@@ -125,6 +143,7 @@ namespace rpg
             if (keyboardState.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
             {
                 Projectile.projectiles.Add(new Projectile(position, direction));
+                MySounds.projectileSound.Play();
             }
             prevKeyboardState = keyboardState;
         } // end of Update()

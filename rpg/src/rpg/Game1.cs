@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Comora; 
 
 namespace rpg
@@ -11,6 +13,13 @@ namespace rpg
         Up,
         Left,
         Right
+    }
+
+    public static class MySounds
+    {
+        public static SoundEffect projectileSound;
+        public static SoundEffect playerDeath;
+        public static Song bgMusic;
     }
     public class Game1 : Game
     {
@@ -43,6 +52,9 @@ namespace rpg
         Texture2D background;
         Texture2D ball;
         Texture2D skull;
+
+        bool deathSound = false;
+        SpriteFont gameFont;
 
         /****************
         *    OBJECTS    *
@@ -83,6 +95,7 @@ namespace rpg
             background = Content.Load<Texture2D>("background");
             ball = Content.Load<Texture2D>("ball");
             skull = Content.Load<Texture2D>("skull");
+            gameFont = Content.Load<SpriteFont>("gameFont");
 
             // Load player animation
             player.animArray[0] = new SpriteAnimation(walkDown, 4, 8);
@@ -90,6 +103,12 @@ namespace rpg
             player.animArray[2] = new SpriteAnimation(walkLeft, 4, 8);
             player.animArray[3] = new SpriteAnimation(walkRight, 4, 8);
             player.anim = player.animArray[0];
+
+            // Load sounds
+            MySounds.projectileSound = Content.Load<SoundEffect>("Sounds/handcannon");
+            MySounds.playerDeath = Content.Load<SoundEffect>("Sounds/death");
+            MySounds.bgMusic = Content.Load<Song>("Sounds/megaman");
+            MediaPlayer.Play(MySounds.bgMusic);
         }
 
         protected override void Update(GameTime gameTime)
@@ -97,13 +116,21 @@ namespace rpg
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Sounds for dead only
+            if (player.Dead && !deathSound)
+            {
+                deathSound = true;
+                MediaPlayer.Stop();
+                MySounds.playerDeath.Play();
+            }
+
             // Player
             player.Update(gameTime);
             this.camera.Position = player.Position;
             this.camera.Update(gameTime);
 
             // Controller to spawn enemies on a timer
-            Controller.Update(gameTime, skull);
+            if (!player.Dead) Controller.Update(gameTime, skull);
 
             // Projectiles
             foreach (Projectile proj in Projectile.projectiles)
@@ -114,7 +141,13 @@ namespace rpg
             // Enemies
             foreach (Enemy enemy in Enemy.enemies)
             {
-                enemy.Update(gameTime, player.Position);
+                enemy.Update(gameTime, player.Position, player.Dead);
+                // Check for enemy/player collision
+                int sum = enemy.Radius + player.Radius;
+                if (Vector2.Distance(player.Position, enemy.Position) < sum)
+                {
+                    player.Dead = true;
+                }
             }
 
             // Check for collisions between projectiles and enemies
@@ -123,7 +156,7 @@ namespace rpg
                 foreach (Enemy enemy in Enemy.enemies)
                 {
                     // Distance between radii of enemy and projectile
-                    int sum = proj.radius + enemy.radius;
+                    int sum = proj.radius + enemy.Radius;
                     // If distance between projectile and radius is less than sum, there was collision
                     if (Vector2.Distance(proj.Position, enemy.Position) < sum)
                     {
@@ -161,7 +194,12 @@ namespace rpg
             }
 
             // Draw player and player animation
-            player.anim.Draw(_spriteBatch);
+            if (!player.Dead) player.anim.Draw(_spriteBatch);
+
+            if (player.Dead)
+            {
+                _spriteBatch.DrawString(gameFont, "GAME OVER", new Vector2(player.Position.X - PLAYER_SPRITE_RADIUS, player.Position.Y-PLAYER_SPRITE_RADIUS), Color.White);
+            }
 
             _spriteBatch.End();
             base.Draw(gameTime);
