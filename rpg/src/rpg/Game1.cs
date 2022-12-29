@@ -85,10 +85,6 @@ namespace rpg
             player.animArray[2] = new SpriteAnimation(walkLeft, 4, 8);
             player.animArray[3] = new SpriteAnimation(walkRight, 4, 8);
             player.anim = player.animArray[0];
-
-            // Enemies
-            Enemy.enemies.Add(new Enemy(new Vector2(100, 100), skull));
-            Enemy.enemies.Add(new Enemy(new Vector2(700, 200), skull));
         }
 
         protected override void Update(GameTime gameTime)
@@ -96,10 +92,13 @@ namespace rpg
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Player
             player.Update(gameTime);
-            // Set Camera to player
             this.camera.Position = player.Position;
             this.camera.Update(gameTime);
+
+            // Controller to spawn enemies on a timer
+            Controller.Update(gameTime, skull);
 
             // Projectiles
             foreach (Projectile proj in Projectile.projectiles)
