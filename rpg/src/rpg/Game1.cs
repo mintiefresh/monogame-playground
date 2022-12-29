@@ -113,6 +113,27 @@ namespace rpg
                 enemy.Update(gameTime, player.Position);
             }
 
+            // Check for collisions between projectiles and enemies
+            foreach (Projectile proj in Projectile.projectiles)
+            {
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    // Distance between radii of enemy and projectile
+                    int sum = proj.radius + enemy.radius;
+                    // If distance between projectile and radius is less than sum, there was collision
+                    if (Vector2.Distance(proj.Position, enemy.Position) < sum)
+                    {
+                        // Set 'collided/dead' flags to true
+                        proj.Collided = true;
+                        enemy.Dead = true;
+                    }
+                    
+                }
+            }
+            // Remove every projectile/enemy whose collided/dead flag is true.
+            Projectile.projectiles.RemoveAll(p => p.Collided);
+            Enemy.enemies.RemoveAll(e => e.Dead);
+
             base.Update(gameTime);
         }
 

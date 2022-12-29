@@ -17,6 +17,7 @@ namespace rpg
         private int speed = 1000;
         public int radius = 18;
         private Dir direction;
+        private bool collided = false;
 
         public Projectile( Vector2 newPos, Dir newDir)
         {
@@ -27,6 +28,13 @@ namespace rpg
         public Vector2 Position
         {
             get { return position; }
+        }
+
+        public bool Collided
+        {
+            get { return collided; }
+            set { collided = value; }
+
         }
 
         public void Update(GameTime gameTime)
