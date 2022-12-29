@@ -23,6 +23,8 @@ namespace rpg
         public const int RESOLUTION_WIDTH = 1280;
         public const int RESOLUTION_HEIGHT = 720;
         public const int PLAYER_SPRITE_RADIUS = 48;
+        public const int ENEMY_SPRITE_WIDTH = 48;
+        public const int ENEMY_SPRITE_HEIGHT = 66;
 
         /****************
         *   VARIABLES   *
@@ -82,8 +84,11 @@ namespace rpg
             player.animArray[1] = new SpriteAnimation(walkUp, 4, 8);
             player.animArray[2] = new SpriteAnimation(walkLeft, 4, 8);
             player.animArray[3] = new SpriteAnimation(walkRight, 4, 8);
-
             player.anim = player.animArray[0];
+
+            // Enemies
+            Enemy.enemies.Add(new Enemy(new Vector2(100, 100), skull));
+            Enemy.enemies.Add(new Enemy(new Vector2(700, 200), skull));
         }
 
         protected override void Update(GameTime gameTime)
@@ -102,6 +107,12 @@ namespace rpg
                 proj.Update(gameTime);
             }
 
+            // Enemies
+            foreach (Enemy enemy in Enemy.enemies)
+            {
+                enemy.Update(gameTime);
+            }
+
             base.Update(gameTime);
         }
 
@@ -112,6 +123,12 @@ namespace rpg
             // Draw background in upper left
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
 
+            // Draw Enemies
+            foreach (Enemy enemy in Enemy.enemies)
+            {
+                enemy.anim.Draw(_spriteBatch);
+            }
+
             // Draw projectile
             foreach (Projectile proj in Projectile.projectiles)
             {
@@ -120,7 +137,6 @@ namespace rpg
 
             // Draw player and player animation
             player.anim.Draw(_spriteBatch);
-
 
             _spriteBatch.End();
             base.Draw(gameTime);
