@@ -20,9 +20,9 @@ namespace rpg
         /****************
         *   CONSTANTS   *
         *****************/
-        const int RESOLUTION_WIDTH = 1280;
-        const int RESOLUTION_HEIGHT = 720;
-        const int PLAYERPSRITERADIUS = 48;
+        public const int RESOLUTION_WIDTH = 1280;
+        public const int RESOLUTION_HEIGHT = 720;
+        public const int PLAYER_SPRITE_RADIUS = 48;
 
         /****************
         *   VARIABLES   *
@@ -76,6 +76,14 @@ namespace rpg
             background = Content.Load<Texture2D>("background");
             ball = Content.Load<Texture2D>("ball");
             skull = Content.Load<Texture2D>("skull");
+
+            // Load player animation
+            player.animArray[0] = new SpriteAnimation(walkDown, 4, 8);
+            player.animArray[1] = new SpriteAnimation(walkUp, 4, 8);
+            player.animArray[2] = new SpriteAnimation(walkLeft, 4, 8);
+            player.animArray[3] = new SpriteAnimation(walkRight, 4, 8);
+
+            player.anim = player.animArray[0];
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,6 +95,7 @@ namespace rpg
             // Set Camera to player
             this.camera.Position = player.Position;
             this.camera.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -97,8 +106,8 @@ namespace rpg
             // Draw background in upper left
             _spriteBatch.Draw(background, new Vector2(-500, -500), Color.White);
 
-            // Draw player
-            _spriteBatch.Draw(playerSprite , new Vector2(player.Position.X - PLAYERPSRITERADIUS, player.Position.Y - PLAYERPSRITERADIUS), Color.White);
+            // Draw player and player animation
+            player.anim.Draw(_spriteBatch);
 
 
             _spriteBatch.End();

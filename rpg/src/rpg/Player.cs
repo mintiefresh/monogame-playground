@@ -16,6 +16,11 @@ namespace rpg
         private Dir direction = Dir.Down;
         private bool isMoving = false;
 
+        // Animated movement
+        public SpriteAnimation anim;
+        public SpriteAnimation[] animArray = new SpriteAnimation[4];
+
+
         /******************
         *  GETTER/SETTER  *
         *******************/
@@ -34,7 +39,7 @@ namespace rpg
             KeyboardState keyboardState = Keyboard.GetState();
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Player will only move isn't moving.
+            // Player will only move isn't moving (set to false every frame)
             isMoving = false;
 
             // Detect which direction player is moving
@@ -81,6 +86,34 @@ namespace rpg
                         position.Y -= speed * dt;
                         break;
                 }
+            }
+
+            // Movement animation
+            switch (direction)
+            {
+                case Dir.Down:
+                    anim = animArray[0];
+                    break;
+                case Dir.Up:
+                    anim = animArray[1];
+                    break;
+                case Dir.Left:
+                    anim = animArray[2];
+                    break;
+                case Dir.Right:
+                    anim = animArray[3];
+                    break;
+            }
+
+            anim.Position = new Vector2(position.X - Game1.PLAYER_SPRITE_RADIUS, position.Y - Game1.PLAYER_SPRITE_RADIUS);
+
+            if (isMoving) // Walking animation when player moves
+            {
+                anim.Update(gameTime);
+            }
+            else // Set animation to standstill when player is not moving
+            {
+                anim.setFrame(1);
             }
         } // end of Update()
     } // end of Player Class
