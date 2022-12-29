@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-using Comora; 
+using Comora;
+using System;
 
 namespace rpg
 {
@@ -56,6 +57,9 @@ namespace rpg
 
         bool deathSound = false;
         SpriteFont gameFont;
+
+        double timer = 0;
+        int score = 0;
 
         /****************
         *    OBJECTS    *
@@ -166,12 +170,15 @@ namespace rpg
                         proj.Collided = true;
                         enemy.Dead = true;
                         MySounds.enemyHit.Play();
+                        score++;
                     }
                 }
             }
             // Remove every projectile/enemy whose collided/dead flag is true.
             Projectile.projectiles.RemoveAll(p => p.Collided);
             Enemy.enemies.RemoveAll(e => e.Dead);
+
+            timer += gameTime.ElapsedGameTime.TotalSeconds;
 
             base.Update(gameTime);
         }
@@ -202,6 +209,12 @@ namespace rpg
             {
                 _spriteBatch.DrawString(gameFont, "GAME OVER", new Vector2(player.Position.X - PLAYER_SPRITE_RADIUS, player.Position.Y-PLAYER_SPRITE_RADIUS), Color.White);
             }
+
+            // Draw score
+            _spriteBatch.DrawString(gameFont, $"Score: {score}", new Vector2(player.Position.X - 550, player.Position.Y - 350), Color.White);
+
+            // Draw timer
+            _spriteBatch.DrawString(gameFont, $"Time : {Math.Ceiling(timer)}", new Vector2(player.Position.X - 550, player.Position.Y - 300), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
