@@ -25,6 +25,11 @@ namespace rpg
         public const int PLAYER_SPRITE_RADIUS = 48;
         public const int ENEMY_SPRITE_WIDTH = 48;
         public const int ENEMY_SPRITE_HEIGHT = 66;
+        public const int TOP_BORDER = 200;
+        public const int RIGHT_BORDER = 1275;
+        public const int BOTTOM_BORDER = 1250;
+        public const int LEFT_BORDER = 225;
+
 
         /****************
         *   VARIABLES   *

@@ -75,16 +75,20 @@ namespace rpg
                 switch (direction)
                 {
                     case Dir.Right:
-                        position.X += speed * dt;
+                        if (position.X < Game1.RIGHT_BORDER)
+                            position.X += speed * dt;
                         break;
                     case Dir.Left:
-                        position.X -= speed * dt;
+                        if (position.X > Game1.LEFT_BORDER)
+                            position.X -= speed * dt;
                         break;
                     case Dir.Down:
-                        position.Y += speed * dt;
+                        if (position.Y < Game1.BOTTOM_BORDER)
+                            position.Y += speed * dt;
                         break;
                     case Dir.Up:
-                        position.Y -= speed * dt;
+                        if (position.Y > Game1.TOP_BORDER)
+                            position.Y -= speed * dt;
                         break;
                 }
             }
